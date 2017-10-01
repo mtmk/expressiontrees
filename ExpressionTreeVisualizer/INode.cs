@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ExpressionVisualizer
+namespace expressiontrees.ExpressionTreeVisualizer
 {
     public interface INode
     {

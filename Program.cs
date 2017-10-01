@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using ExpressionVisualizer;
+using expressiontrees.ExpressionTreeVisualizer;
 
 namespace expressiontrees
 {
@@ -8,9 +8,20 @@ namespace expressiontrees
     {
         static void Main(string[] args)
         {
-            Expression<Func<int, bool>> lambda = num => num < 5;  
+            var p1 = Expression.Parameter(typeof(int), "num");
+            var lam1 = Expression.Lambda<Func<int, bool>>(
+                Expression.LessThan(
+                    p1, Expression.Constant(5)
+                ),
+                p1
+            );
             
-            // ExperimentalDump(lambda);
+            Console.WriteLine(lam1.Compile()(3));
+            
+            //Expression<Func<int, bool>> lambda = num => num < 5;  
+            Expression<Func<int?, bool>> lambda = num => (num ?? 3) < 5;  
+            
+            ExperimentalDump(lambda);
 
             var node = new ExpressionTreeNode(lambda);
             Dump(node);
@@ -25,7 +36,7 @@ namespace expressiontrees
             }
         }
         
-        private static void ExperimentalDump(Expression<Func<int, bool>> lambda)
+        private static void ExperimentalDump(LambdaExpression lambda)
         {
             Console.WriteLine($"{lambda}");
 

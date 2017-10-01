@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Globalization;
-using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq.Expressions;
+using System.Reflection;
 
 [assembly: CLSCompliant(true)]
 
-namespace ExpressionVisualizer
+namespace expressiontrees.ExpressionTreeVisualizer
 {
     public class AttributeNode : INode
     {
-        public AttributeNode(Object attribute, PropertyInfo propertyInfo)
+        public AttributeNode(object attribute, PropertyInfo propertyInfo)
         {
             Text = propertyInfo.Name + " : " + propertyInfo.PropertyType.ObtainOriginalName();
-            ImageIndex = 3;
-            SelectedImageIndex = 3;
 
-            Object value = propertyInfo.GetValue(attribute, null);
+            var value = propertyInfo.GetValue(attribute, null);
             if (value != null)
             {
                 if (value.GetType().IsGenericType && value.GetType().GetGenericTypeDefinition() == typeof(ReadOnlyCollection<>)) {
@@ -58,7 +56,7 @@ namespace ExpressionVisualizer
                 }
                 else
                 {
-                    Text += " : \"" + value.ToString() + "\"";
+                    Text += " : \"" + value + "\"";
                 }
             }
             else
@@ -67,11 +65,7 @@ namespace ExpressionVisualizer
             }
         }
 
-        public int SelectedImageIndex { get; set; }
-
-        public int ImageIndex { get; set; }
-
-        public string Text { get; set; }
+        public string Text { get; }
 
         public List<INode> Nodes { get; } = new List<INode>();
     }

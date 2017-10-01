@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace ExpressionVisualizer
+namespace expressiontrees.ExpressionTreeVisualizer
 {
     public class ExpressionTreeNode : INode
     {
 
-        public ExpressionTreeNode(Object value)
+        public ExpressionTreeNode(object value)
         {
-            Type type = value.GetType();
+            var type = value.GetType();
             Text = type.ObtainOriginalName();
 
             if (value is Expression)
             {
-                ImageIndex = 2;
-                SelectedImageIndex = 2;
-
-                PropertyInfo[] propertyInfos = null;
+                PropertyInfo[] propertyInfos;
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Expression<>))
                 {
                     propertyInfos = type.BaseType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -30,7 +26,7 @@ namespace ExpressionVisualizer
 
                 foreach (PropertyInfo propertyInfo in propertyInfos)
                 {
-                    if ((propertyInfo.Name != "nodeType"))
+                    if (propertyInfo.Name != "nodeType")
                     {
                         Nodes.Add(new AttributeNode(value, propertyInfo));
                     }
@@ -38,17 +34,11 @@ namespace ExpressionVisualizer
             }
             else
             {
-                ImageIndex = 4;
-                SelectedImageIndex = 4;
-                Text = "\"" + value.ToString() + "\"";
+                Text = "\"" + value + "\"";
             }
         }
 
-        public int SelectedImageIndex { get; set; }
-
-        public int ImageIndex { get; set; }
-
-        public string Text { get; set; }
+        public string Text { get; }
 
         public List<INode> Nodes { get; } = new List<INode>();
     }
